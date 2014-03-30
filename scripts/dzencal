@@ -1,0 +1,6 @@
+while true ; do
+  date +"^fg(#A5D3CA)%A %B %d^fg() ^fg(#67C7E2)%I:%M%P^fg()  ^i(/home/robert/dzen-icons/xbm8x8/clock.xbm)" 
+  echo
+  cal
+  sleep 60 
+done | dzen2 -w 250 -x 2310 -h 15 -ta c -sa c -l 9 -bg '#222222' -e 'button1=togglecollapse;button3=exit:13' -dock -u
