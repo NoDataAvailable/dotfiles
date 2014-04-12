@@ -236,6 +236,7 @@ myLayout = mouseResize $ windowArrange $ avoidStruts $ tiled ||| focused_tiled |
 myManageHook = composeAll
     [ className =? "MPlayer"        --> doFloat
     , className =? "mplayer2"       --> doFloat
+    , className =? "mpv"       --> doFloat
     , resource  =? "desktop_window" --> doIgnore
     , resource  =? "kdesktop"       --> doIgnore
     , className =? "Vlc"            --> doFloat

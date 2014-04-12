@@ -22,6 +22,9 @@ Bundle 'airblade/vim-gitgutter'
 Bundle 'sjl/gundo.vim'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'kchmck/vim-coffee-script'
+Bundle 'tomasr/molokai'
+Bundle 'ervandew/supertab'
+Bundle 'trapd00r/neverland-vim-theme'
 
 
 filetype plugin indent on
@@ -41,20 +44,30 @@ set ts=4 sts=4 sw=4
 set textwidth=80
 set formatoptions+=t
 set colorcolumn=+1
-colors slate
 
-let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:solarized_termcolors=256
-let g:airline_theme='bubblegum'
+let g:rehash256 = 1
+let g:airline_theme='simple'
 let g:tmuxline_preset = {
       \'a'    : '#S',
       \'b'    : '#W',
       \'win'  : ['#I', '#W'],
       \'cwin' : ['#I', '#W'],
+      \'x'    : [' ', '♫ #(mpc)'], 
       \'y'    : ['%a', '%R'],
-      \'z'    : '#H'}
+      \'z'    : '#H',
+	  \ 'options': {
+          \'status-justify': 'left' }
+      \}
+
+colors molokai
+
+
+" Mappings
+
 nnoremap <F5> :GundoToggle<CR>
 " Remove Whitespace
 nnoremap <silent> <F4> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>
