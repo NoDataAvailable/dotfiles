@@ -15,7 +15,7 @@ compton -bc
 ~/scripts/dzencal &
 [[ -z $(pidof mpd) ]] && mpd
 python2 scripts/mpc_dzen.py | dzen2 -w 950 -x 2560 -h 15 -ta c -bg '#222222' -dock &
-python2 scripts/dzenicons_desktop.py | dzen2 -w 840 -x 1470 -h 15 -ta r -bg '#222222' -dock &
+scripts/dzen_stats.py
 trayer --edge top --align right --widthtype pixel --width 100 --expand true --SetPartialStrut true --transparent true --alpha 0 --tint 0x222222 --heighttype pixel --height 15 --padding 1 --monitor 1 &
 [[ -z $(pidof xflux) ]] && xflux -r 1 -l 43.1500 -g -79.5000
 exec xmonad

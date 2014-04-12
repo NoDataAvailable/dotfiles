@@ -18,7 +18,7 @@ def value(path):
     fp = open(path)
     val = fp.readline().rstrip()
     fp.close()
-    return val 
+    return val
 
 iValue = lambda path : int(value(path))
 fValue = lambda path : float(value(path))
@@ -34,7 +34,7 @@ def new_icon(colour, icon_name, percent, bar):
     if bar:
         return gdbar(newIcon, percent, colour, bar)
     else:
-        return newIcon 
+        return newIcon
 
 # Borrowed (see: mostly copied) from wicd's source
 def setup_dbus(force=True):
@@ -50,7 +50,7 @@ def setup_dbus(force=True):
     wired = dbus_ifaces['wired']
 
     if not daemon:
-        return Fals
+        return False
 
     return True
 
@@ -76,14 +76,14 @@ weath_colours = [cyan,skyblue,green,yellow,orange,red]
 
 location = "CYYZ"
 weather_url = "http://weather.noaa.gov/pub/data/observations/metar/decoded/" + location + '.TXT'
-online = False 
+online = False
 
 # CPU Load
 cpu_icon = "cpu"
 cpu_colours = [green, yellow, orange, red]
 
 cpu_stat = "/proc/stat"
-cpu_temp = "/sys/class/hwmon/hwmon2/device/temp1_input" 
+cpu_temp = "/sys/class/hwmon/hwmon2/device/temp1_input"
 prev_total = 0
 prev_idle = 0
 
@@ -114,7 +114,7 @@ count = 0
 while True:
     output = ""
     slave = "| "
-    
+
     if count >= 900:
         count = 0
 
@@ -124,21 +124,21 @@ while True:
   #      gpu_state = 0
    # else:
 #        gpu_state = (gpu_temperature - 40) / 15
- #   output += '  |' + new_icon(gpu_colours[gpu_state], gpu_icon, gpu_temperature, 25) 
+ #   output += '  |' + new_icon(gpu_colours[gpu_state], gpu_icon, gpu_temperature, 25)
   #  slave +=  ' [' + str(gpu_temperature) + " C]"
 
-    # CPU 
+    # CPU
     stats = value(cpu_stat).split()
     stats.pop(0)
     total = sum([int(i) for i in stats])
     idle = int(stats[3])
     cpu_percent = (1000 * (total-prev_total-idle+prev_idle)/(total-prev_total) + 5) / 10
     prev_total = total
-    prev_idle = idle 
+    prev_idle = idle
     if cpu_percent >= 97:
         cpu_percent = 97
     cpu_state = cpu_percent / 25
-    output += ' ' + new_icon(cpu_colours[cpu_state], cpu_icon, cpu_percent, 25) 
+    output += ' ' + new_icon(cpu_colours[cpu_state], cpu_icon, cpu_percent, 25)
     slave += ' [' + str(iValue(cpu_temp) / 1000) + " C]"
 
     # RAM Usage
@@ -152,51 +152,51 @@ while True:
         ram_state = (ram_use - 21) / 20
     output += ' ' + new_icon(ram_colours[ram_state], ram_icon, ram_use, 25)
     slave += ' [' + "%3d" % (ram_use) + '%]'
-   
+
     # Wireless
     if dbus_up:
         net_id = wireless.GetCurrentNetworkID(0)
         if net_id >= 0:
-	    ssid = wireless.GetWirelessProperty(net_id, "essid")
+            ssid = wireless.GetWirelessProperty(net_id, "essid")
             strength = int(wireless.GetWirelessProperty(net_id, "quality"))
-	    ip = wireless.GetWirelessIP('') 
-	    if strength >= 97:
-	        strength = 97
-	else:
-	    ssid = "n/a"
-	    strength = -1
+            ip = wireless.GetWirelessIP('')
+            if strength >= 97:
+                strength = 97
+        else:
+            ssid = "n/a"
+            strength = -1
     else:
         ssid = 'n/a'
-	strength = -1
+        strength = -1
     net_state = (strength + 50) / 50 + 1
     if net_state <= 1 and not ip:
         net_state = 4
-    #output +=  ' ' + new_icon(net_colours[net_state], net_icons[net_state], strength, 25) 
-    output +=  '  |' + new_icon(net_colours[net_state], net_icons[net_state], strength, 0) + ' ' + ip 
+    #output +=  ' ' + new_icon(net_colours[net_state], net_icons[net_state], strength, 25)
+    output +=  '  |' + new_icon(net_colours[net_state], net_icons[net_state], strength, 0) + ' ' + ip
     slave += ' [' + "%3d" % (strength) + '%]'
 
     # Weather
     if net_state != 1 and net_state != 4:
-	if count == 0:
-	    try:
-	        weath_file = urlopen(weather_url)
-	        weath_lines = weath_file.read().split('\n')
+        if count == 0:
+            try:
+                weath_file = urlopen(weather_url)
+                weath_lines = weath_file.read().split('\n')
                 city = weath_lines[0].split()[0]
                 temp_str = weath_lines[5].split('(')[1].rstrip(')')
-	        temp = int(temp_str.split()[0])
-		temp_str = "%2d C" % temp
-	        if temp <= 0:
+                temp = int(temp_str.split()[0])
+                temp_str = "%2d C" % temp
+                if temp <= 0:
                     temp_status = 0
                 elif temp > 40:
-	            temp_status = 5
+                    temp_status = 5
                 else:
-	            temp_status = temp / 10 + 1
-		online = True
+                    temp_status = temp / 10 + 1
+                online = True
             except:
-		online = False
-	if online:
-	    output += '  |' + new_icon(weath_colours[temp_status], weath_icon, temp, 0) + ' ' + temp_str
-	    slave += '  |  ' + city
+                online = False
+        if online:
+            output += '  |' + new_icon(weath_colours[temp_status], weath_icon, temp, 0) + ' ' + temp_str
+            slave += '  |  ' + city
 
     # Audio
     raw_line = os.popen("amixer sget Master | grep %")
