@@ -7,11 +7,16 @@ import json
 import alsaaudio
 import datetime
 
+# Config
+WEATHER_ID = "6075357"
+SND_CARD_NAME = "PCH"
+
+
 # Definitions:
 MEM_FILE = "/proc/meminfo"
 CPU_STAT = "/proc/stat"
 TCP_FILE = "/proc/net/tcp"
-WEATHER_ID = "6075357"
+AUDIO_CARD = None
 
 ICON_DIR = "/home/robert/dzen-icons/xbm8x8/"
 WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?id=" +\
@@ -43,6 +48,9 @@ ip = "0.0.0.0"
 temperature_s = "???"
 temperature_i = 0
 counter = 0
+
+for card in enumerate(alsaaudio.cards()):
+    AUDIO_CARD = card[0] if card[1] == SND_CARD_NAME else AUDIO_CARD
 
 icon_path = lambda name : ICON_DIR + name + ".xbm"
 
@@ -110,7 +118,7 @@ while not sleep(1):
             print("Failed Weather Fetch")
 
     try:
-        volume = max(min(alsaaudio.Mixer(cardindex=2).getvolume()[0], 99), 1)
+        volume = max(min(alsaaudio.Mixer(cardindex=AUDIO_CARD).getvolume()[0], 99), 1)
     except:
         volume = 50
 
@@ -129,7 +137,7 @@ while not sleep(1):
             mock_gdbar(volume, width=3*BAR_WIDTH),
             )
 
-    date_output = datetime.datetime.now().strftime( 
+    date_output = datetime.datetime.now().strftime(
                     "^fg(" + CYAN + ")%A %B %d^fg() ^fg(" + SKYBLUE +\
                     ")%I:%M%P^fg()  ^i(" + icon_path("clock") + ")\n"
                     )
