@@ -5,6 +5,7 @@ import subprocess
 import urllib.request
 import json
 import alsaaudio
+import datetime
 
 # Definitions:
 MEM_FILE = "/proc/meminfo"
@@ -25,8 +26,8 @@ ORANGE  = "#FFC65B" # "orange"
 YELLOW  = "#FFFF84" # "yellow"
 GREEN   = "#78FC4E" # "green"
 BLUE    = "#75B4FF" # "blue"
-CYAN    = "#75ECFD" # "cyan"
-SKYBLUE = "#B5FFFC" # "skyblue"
+CYAN    = "#A5D3CA" # "cyan"
+SKYBLUE = "#67C7E2" # "skyblue"
 GREY    = "#999999" # "grey"
 
 COLOUR_LEVELS = [GREEN, GREEN, YELLOW, ORANGE, RED]
@@ -62,8 +63,11 @@ def mock_gdbar(percent, width=BAR_WIDTH, height=BAR_HEIGHT):
         width + 2 - int(width * percent/100) # reposition cursor
         )
 
-dzen = subprocess.Popen(["dzen2", "-w", "840", "-x", "1470", "-h", "15",
+dzen_monitor = subprocess.Popen(["dzen2", "-w", "840", "-x", "1470", "-h", "15",
             "-ta", "r", "-bg", "#222222", "-dock" ], stdin=subprocess.PIPE)
+
+dzen_date = subprocess.Popen(["dzen2", "-w", "250", "-x", "2310", "-h", "15",
+            "-ta", "c", "-bg", "#222222", "-dock" ], stdin=subprocess.PIPE)
 
 while not sleep(1):
     mem_fp = open(MEM_FILE)
@@ -105,11 +109,14 @@ while not sleep(1):
         except:
             print("Failed Weather Fetch")
 
-    volume = max(min(alsaaudio.Mixer(cardindex=2).getvolume()[0], 99), 1)
+    try:
+        volume = max(min(alsaaudio.Mixer(cardindex=2).getvolume()[0], 99), 1)
+    except:
+        volume = 50
 
     counter = (counter + 1) % 300   # Reset every 5 minutes
 
-    dzen_output = "{0} {1}   {2} {3}  |  {4}  {5}  |  {6}  {7}  |  {8}  {9}  |\n".format(
+    monitor_output = "{0} {1}   {2} {3}  |  {4}  {5}  |  {6}  {7}  |  {8}  {9}  |\n".format(
             icon("cpu", cpu_used),
             mock_gdbar(cpu_used),
             icon("mem", mem_used),
@@ -122,6 +129,14 @@ while not sleep(1):
             mock_gdbar(volume, width=3*BAR_WIDTH),
             )
 
+    date_output = datetime.datetime.now().strftime( 
+                    "^fg(" + CYAN + ")%A %B %d^fg() ^fg(" + SKYBLUE +\
+                    ")%I:%M%P^fg()  ^i(" + icon_path("clock") + ")\n"
+                    )
+
     #print(dzen_output)
-    dzen.stdin.write(bytes(dzen_output, "ascii"))
-    dzen.stdin.flush()
+    dzen_monitor.stdin.write(bytes(monitor_output, "ascii"))
+    dzen_monitor.stdin.flush()
+
+    dzen_date.stdin.write(bytes(date_output, "ascii"))
+    dzen_date.stdin.flush()
