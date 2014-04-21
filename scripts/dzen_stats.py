@@ -63,18 +63,31 @@ def icon(name, percent):
     colour = COLOUR_LEVELS[int(min(99,percent)/20)]
     return "^fg({0})^i({1})^fg()".format(colour, icon_path(name))
 
-def mock_gdbar(percent, width=BAR_WIDTH, height=BAR_HEIGHT):
-    colour = COLOUR_LEVELS[int(min(99,percent)/20)]
-    return "^ib(1)^fg({0})^ro({1}x{2})^p({3})^fg({4})^r({5}x{6})^p({7})^ib(0)^fg()".format(
+def mock_gdbar(*percent, width=BAR_WIDTH, height=BAR_HEIGHT):
+    percent = sorted(percent, reverse=True)
+
+    bar = "^ib(1)^fg({0})^ro({1}x{2})^p({3})".format(
         GREY,       # outline colour
         width + 4,  # outline width
         height + 4, # outline height
         -2 - width, # move cursor back to draw actual bar
-        colour,     # bar colour
-        int(width * percent/100),
-        height,
-        width + 2 - int(width * percent/100) # reposition cursor
         )
+
+    for i, p in enumerate(percent):
+        colour = COLOUR_LEVELS[int(min(99,p)/20)]
+        if i == len(percent) - 1:
+            move = width + 2 - int(width * p/100)
+        else:
+            move = - int(width * p/100)
+        bar += "^fg({0})^r({1}x{2})^p({3})".format(
+            colour,     # bar colour
+            int(width * p/100),
+            height,
+            move # reposition cursor
+        )
+
+    bar += "^ib(0)^fg()"
+    return bar
 
 
 for card in enumerate(alsaaudio.cards()):
@@ -99,7 +112,9 @@ while not sleep(1):
     mem_fp = open(MEM_FILE)
     mem_total = int(mem_fp.readline().split()[1])
     mem_free  = int(mem_fp.readline().split()[1])
+    mem_avail = int(mem_fp.readline().split()[1])
     mem_used  = 100 - int(100*mem_free/mem_total)
+    mem_reserved = 100 - int(100*mem_avail/mem_total)
     mem_fp.close()
 
     cpu_fp = open(CPU_STAT)
@@ -149,8 +164,8 @@ while not sleep(1):
     monitor_output = "{0} {1}   {2} {3}  |  {4}  {5}  |  {6}  {7}  |  {8}  {9}  |\n".format(
             icon("cpu", cpu_used),
             mock_gdbar(cpu_used),
-            icon("mem", mem_used),
-            mock_gdbar(mem_used),
+            icon("mem", mem_reserved),
+            mock_gdbar(mem_used, mem_reserved),
             icon("wifi_02", 0 if connected else 99),
             ip,
             icon("temp", temperature_i),
