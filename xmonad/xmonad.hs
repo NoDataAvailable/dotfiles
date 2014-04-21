@@ -19,7 +19,7 @@ import Data.Map    (fromList)
 import Data.Monoid (mappend)
 
 import XMonad.Actions.MouseResize
-import XMonad.Actions.Volume
+-- import XMonad.Actions.Volume
 import XMonad.Layout.WindowArranger
 import XMonad.Hooks.ICCCMFocus
 
@@ -129,7 +129,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Use this binding with avoidStruts from Hooks.ManageDocks.
     -- See also the statusBar function from Hooks.DynamicLog.
     --
-    -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
+    , ((modm              , xK_b     ), sendMessage ToggleStruts)
 
     -- Quit xmonad
     , ((modm .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
@@ -140,8 +140,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- My own shortcuts
     , ((0                 , xK_Print	), spawn "scrot")
     --, ((modm              , xK_Print	), spawn "byzanz-record ~/Dropbox/Public/desktop.gif")
-    , ((modm              , xK_KP_Add	), lowerVolume 4 >>= alert)
-    , ((modm              , xK_KP_Subtract), raiseVolume 4 >>= alert)
+   -- , ((modm              , xK_KP_Add	), lowerVolume 4 >>= alert)
+   -- , ((modm              , xK_KP_Subtract), raiseVolume 4 >>= alert)
+    , ((modm              , xK_KP_Add	),	spawn "~/bin/pa-vol minus")
+    , ((modm              , xK_KP_Subtract), spawn "~/bin/pa-vol plus")
+    , ((modm              , xK_Page_Up	), spawn "mpc volume +3")
+    , ((modm              , xK_Page_Down), spawn "mpc volume -3")
 
     , ((modm		      ,	xK_l		), spawn "slock")
     , ((modm              ,	xK_grave    ), spawn "xterm --geometry 150x75 -e htop")

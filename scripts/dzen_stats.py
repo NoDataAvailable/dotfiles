@@ -5,11 +5,13 @@ import subprocess
 import urllib.request
 import json
 import alsaaudio
+import mpd
 import datetime
 
 # Config
 WEATHER_ID = "6075357"
 SND_CARD_NAME = "PCH"
+MPD_COMM = "urxvt -e ncmpcpp"
 
 
 # Definitions:
@@ -48,11 +50,14 @@ ip = "0.0.0.0"
 temperature_s = "???"
 temperature_i = 0
 counter = 0
+mpd_loaded = False
+mpd_client = mpd.MPDClient()    # init MPD Client
+mpd_output = "^fg(" + RED + ")Loading...^fg()\n"
 
-for card in enumerate(alsaaudio.cards()):
-    AUDIO_CARD = card[0] if card[1] == SND_CARD_NAME else AUDIO_CARD
 
 icon_path = lambda name : ICON_DIR + name + ".xbm"
+
+t_fmt = lambda sec : "%d:%.2d" % (sec/60,sec%60)
 
 def icon(name, percent):
     colour = COLOUR_LEVELS[int(min(99,percent)/20)]
@@ -71,11 +76,24 @@ def mock_gdbar(percent, width=BAR_WIDTH, height=BAR_HEIGHT):
         width + 2 - int(width * percent/100) # reposition cursor
         )
 
+
+for card in enumerate(alsaaudio.cards()):
+    AUDIO_CARD = card[0] if card[1] == SND_CARD_NAME else AUDIO_CARD
+
+try:
+    mpd_client.connect("localhost", 6600)	# connect to local MPD Server
+    mpd_loaded = True
+except:
+    mpd_loaded = False
+
 dzen_monitor = subprocess.Popen(["dzen2", "-w", "840", "-x", "1470", "-h", "15",
             "-ta", "r", "-bg", "#222222", "-dock" ], stdin=subprocess.PIPE)
 
 dzen_date = subprocess.Popen(["dzen2", "-w", "250", "-x", "2310", "-h", "15",
             "-ta", "c", "-bg", "#222222", "-dock" ], stdin=subprocess.PIPE)
+
+dzen_mpd = subprocess.Popen(["dzen2", "-w", "950", "-x", "2560", "-h", "15",
+            "-ta", "l", "-bg", "#222222", "-dock" ], stdin=subprocess.PIPE)
 
 while not sleep(1):
     mem_fp = open(MEM_FILE)
@@ -105,6 +123,7 @@ while not sleep(1):
         ip = ".".join([str(i) for i in ip])
     else:
         connected = False
+    ip_fp.close()
 
     if counter == 0:
         try:
@@ -112,13 +131,16 @@ while not sleep(1):
             weather_json = weather_json.read().decode('utf-8')
             weather_data = json.loads(weather_json)
             temp = weather_data['main']['temp']
-            temperature_s = str(temp) + " C"
             temperature_i = min(max(temp, 0) * 2, 99)
+            temperature_s = str(temp) + "°C"
+            temp = weather_data['weather'][0]['description']
+            temperature_s = temperature_s + " ( " + temp + " )"
         except:
             print("Failed Weather Fetch")
 
     try:
-        volume = max(min(alsaaudio.Mixer(cardindex=AUDIO_CARD).getvolume()[0], 99), 1)
+        volume = alsaaudio.Mixer(cardindex=AUDIO_CARD).getvolume()[0]
+        volume = max(min(volume, 99), 1)
     except:
         volume = 50
 
@@ -133,7 +155,7 @@ while not sleep(1):
             ip,
             icon("temp", temperature_i),
             temperature_s,
-            icon("spkr_01", volume),
+            icon("phones", volume),
             mock_gdbar(volume, width=3*BAR_WIDTH),
             )
 
@@ -142,9 +164,66 @@ while not sleep(1):
                     ")%I:%M%P^fg()  ^i(" + icon_path("clock") + ")\n"
                     )
 
-    #print(dzen_output)
-    dzen_monitor.stdin.write(bytes(monitor_output, "ascii"))
+    if mpd_loaded:
+        current_song = mpd_client.currentsong()     # get the currentsong dict
+        mpd_status = mpd_client.status()
+        music_icon = "^ca(1, " + MPD_COMM + ') ' + icon('note', 1) + " ^ca()"
+        state_icon = "^ca(1, mpc toggle) " + icon(mpd_status['state'], 50) + " ^ca()"
+        mpd_vol = " {0} {1}% ".format(
+                icon('spkr_01', int(mpd_status['volume'])),
+                mpd_status['volume']
+                )
+        if mpd_status['state'] != 'stop':
+            song_file = current_song['file'].split('/')
+            if 'album' in current_song.keys():
+                album = current_song['album']
+            else:
+                album = song_file[-2]
+            if 'title' in current_song.keys():
+                title = current_song['title']
+            else:
+                title = song_file[-1]
+            if 'artist' in current_song.keys():
+                artist = current_song['artist']
+            elif 'albumartist' in current_song.keys():
+                artist = current_song['albumartist']
+            else:
+                atrist = "Unknown Artist"
+            song_time = [int(s) for s in mpd_status['time'].split(':')]
+            song_time = " [{0}] [{1}] [{2}] [ {3} / {4} ]  ".format(
+                    music_icon,
+                    mpd_vol,
+                    state_icon,
+                    t_fmt(song_time[0]),
+                    t_fmt(song_time[1])
+                    )
+        else:
+            album = ""
+            title = "Not Playing"
+            artist = ""
+            song_time = "  [ " + music_icon + " ] [ 0:00 / 0:00 ]  "
+        mpd_output = "{6}^fg({0}){1}^fg() -- ^fg({2}){3}^fg() -- ^fg({4}){5}^fg()\n".format(
+                SKYBLUE,
+                artist,
+                ORANGE,
+                title,
+                GREEN,
+                album,
+                song_time
+                )
+    else:
+        try:
+            mpd_client.connect("localhost", 6600)	# connect to local MPD Server
+            mpd_loaded = True
+        except:
+            mpd_loaded = False
+            mpd_output = "^fg(" + RED + ")Loading...^fg()\n"
+
+    dzen_monitor.stdin.write(bytes(monitor_output, "utf-8"))
     dzen_monitor.stdin.flush()
 
-    dzen_date.stdin.write(bytes(date_output, "ascii"))
+    dzen_date.stdin.write(bytes(date_output, "utf-8"))
     dzen_date.stdin.flush()
+
+    dzen_mpd.stdin.write(bytes(mpd_output, "utf-8"))
+    dzen_mpd.stdin.flush()

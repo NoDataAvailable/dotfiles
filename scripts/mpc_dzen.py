@@ -57,9 +57,9 @@ while True:
     status = client.status()
     output = ""
     if cs and status['state'] != 'stop':
-		for field in fields:
-			if field[0] in cs.keys():
-				output += "^fg(" + field[1] + ")" + cs[field[0]] + "^fg() -- "
+        for field in fields:
+            if field[0] in cs.keys():
+                output += "^fg(" + field[1] + ")" + cs[field[0]] + "^fg() -- "
     else:
         output = "^fg(" + grey + ") -- ^fg()" + "^fg(" + red + ") Nothing Playing ^fg()" + "^fg(" + grey + ") -- ^fg()"
 
@@ -69,7 +69,7 @@ while True:
         output += ' '
     
     if status['state'] != 'stop':
-	time = [int(i) for i in status['time'].split(':')]
+        time = [int(i) for i in status['time'].split(':')]
     else:
         time = [0,1]
     output += "^ca(1, 'ncmpcpp toggle')" + new_icon(yellow, status['state'], time[0], 150, time[1]) + "^ca()"

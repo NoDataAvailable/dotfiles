@@ -2,4 +2,5 @@
 *.hi
 *.bak
 *.errors
+*.swp
 xmonad-x86_64-linux
