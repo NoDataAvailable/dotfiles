@@ -40,3 +40,10 @@ alias usermount='sudo mount -o gid=users,fmask=113,dmask=002'
 #. /usr/share/zsh/site-contrib/powerline.zsh
 source ~/.shell_prompt.sh
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+4chdl() {
+  wget -O - $1 |
+  grep -Eo 'i.4cdn.org/[^"]+' |
+  uniq |
+  xargs wget
+}

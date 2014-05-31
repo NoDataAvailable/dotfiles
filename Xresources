@@ -1,0 +1,80 @@
+! urxvt -------------------------------------------
+!URxvt.font: 	-*-gohufont-medium-*-*-*-*-*-*-*-*-*-*-*
+URxvt.font: 	-artwiz-anorexia-*-*-*-*-11-*-*-*-*-*-*-*
+!URxvt.font: 	xft:inconsolata:pixelsize=11
+URxvt.geometry:           100x30
+URxvt.scrollBar: false
+URxvt.depth: 32
+URxvt.background: rgba:1111/1111/1111/cccc
+
+! Infinality
+Xft.autohint: 0
+Xft.lcdfilter:  lcddefault
+Xft.hintstyle:  hintfull
+Xft.hinting: 1
+Xft.antialias: 1
+Xft.dpi: 96
+Xft.rgba: rgb
+
+! terminal colors ------------------------------------------------------------
+
+! tangoesque scheme
+*background: #222222
+*foreground: #babdb6
+! Black (not tango) + DarkGrey
+*color0:  #000000
+*color8:  #555555
+! DarkRed + Red
+*color1:  #fa4e4e
+*color9:  #f78989
+! DarkGreen + Green
+*color2:  #68e24e
+*color10: #b1e598
+! DarkYellow + Yellow
+*color3:  #fbe661
+*color11: #f6ee9b
+! DarkBlue + Blue
+*color4:  #3cb9eb
+*color12: #79d1d2
+! DarkMangenta + Mangenta
+*color5:  #ff51c8
+*color13: #fe92d9
+!DarkCyan + Cyan (both not tango)
+*color6:  #8bf4f7
+*color14: #55ffff
+! LightGrey + White
+*color7:  #aaaaaa
+*color15: #ffffff
+
+
+! xterm ----------------------------------------------------------------------
+
+xterm*geometry:           300x45
+!xterm*faceName:           GohuFont:size=8
+xterm*faceName:           Cure:size=11
+!xterm*faceName:           terminus:bold:pixelsize=14
+!xterm*font:              -*-dina-medium-r-*-*-16-*-*-*-*-*-*-*
+xterm*dynamicColors:      true
+xterm*utf8:               2
+xterm*eightBitInput:      true
+xterm*saveLines:          512
+xterm*scrollKey:          true
+xterm*scrollTtyOutput:    false
+xterm*scrollBar:          false
+xterm*rightScrollBar:     true
+xterm*jumpScroll:         true
+xterm*multiScroll:        true
+xterm*toolBar:            false
+xterm*termName:			  xterm-256color
+
+! dzen2 ---------------------------
+
+!dzen2.font: gohufont-8
+!edges
+!anorexia
+!gelly-7
+!nu
+!snap
+!cure
+dzen2.font: snap-8
+dzen2.background: #222222
