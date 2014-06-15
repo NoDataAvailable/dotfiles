@@ -1,3 +1,3 @@
 DEFAULT=xmonad
-echo $1 >> /home/robert/login_attempts
+echo $1 >> ~/login_attempts
 source ~/.xinitrc.$1 || $1 || $DEFAULT
