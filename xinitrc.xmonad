@@ -6,11 +6,11 @@ if [ -d /etc/X11/xinit/xinitrc.d ]; then
 fi
 
 xset +fp /usr/share/fonts/artwiz-fonts
-xset fp rehash 
+xset fp rehash
 
-xrdb ~/.Xresources 
-~/.screenlayout/DualMon.sh 
-nitrogen --restore 
+xrdb ~/.Xresources
+~/.screenlayout/DualMon.sh
+nitrogen --restore
 compton -bc
 [[ -z $(pidof mpd) ]] && mpd
 scripts/dzen_stats.py &

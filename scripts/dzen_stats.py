@@ -17,7 +17,7 @@ MPD_COMM = "urxvt -e ncmpcpp"
 # Definitions:
 MEM_FILE = "/proc/meminfo"
 CPU_STAT = "/proc/stat"
-TCP_FILE = "/proc/net/tcp"
+TCP_FILE = "/proc/net/arp"
 AUDIO_CARD = None
 
 ICON_DIR = "/home/robert/dzen-icons/xbm8x8/"
@@ -128,14 +128,11 @@ while not sleep(1):
     cpu_fp.close()
 
     ip_fp = open(TCP_FILE)
-    for i in range(2):
-        ip_fp.readline()
+    ip_fp.readline()
     sample_tcp = ip_fp.readline()
     if sample_tcp:
         connected = True
-        sample_tcp = sample_tcp.split()[1]
-        ip = [int(h, 16) for h in [sample_tcp[6-i:8-i] for i in range(0,8,2)]]
-        ip = ".".join([str(i) for i in ip])
+        ip = sample_tcp.split()[0]
     else:
         connected = False
     ip_fp.close()

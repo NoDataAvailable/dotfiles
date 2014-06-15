@@ -5,6 +5,10 @@ bindkey -v
 zstyle :compinstall filename '/home/robert/.zshrc'
 bindkey    "^[[3~"          delete-char
 bindkey    "^[3;5~"         delete-char
+#function zle-line-init () { echoti smkx }
+#function zle-line-finish () { echoti rmkx }
+#zle -N zle-line-init
+#zle -N zle-line-finish
 
 autoload -Uz compinit #promptinit
 compinit
