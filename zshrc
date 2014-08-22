@@ -46,8 +46,24 @@ source ~/.shell_prompt.sh
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 4chdl() {
-  wget -O - $1 |
-  grep -Eo 'i.4cdn.org/[^"]+' |
-  uniq |
-  xargs wget
+  4chdl_page() {
+    mkdir $1 && cd $1
+    wget -nv -O - $2 |
+    grep -Eo 'i.4cdn.org/[^"]+' |
+    uniq | xargs | read IMGS && [[ -n $IMGS ]] && echo $IMGS |
+    xargs wget -nc -nv
+    cd ..
+  }
+
+  if [ $# != "0" ]; then
+    for URL in $@; do
+      DIR=${${${URL#*.org/}%%/*}}${${URL##*/}%#*}
+	  4chdl_page $DIR $URL
+   done
+  else
+    for DIR in $( ls | grep '^[a-z][a-z]*[0-9]*[0-9]/$' ); do
+      URL="https://boards.4chan.org/${DIR%%[0-9]*[0-9]/}/thread/${${DIR##*[a-z]}%/}"
+	  4chdl_page $DIR $URL
+    done
+  fi
 }
