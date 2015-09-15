@@ -1,6 +1,6 @@
 #!/usr/bin/python2
 
-import mpd 
+import mpd
 from time import sleep	 # Import Internal Time Module
 import os
 #import shutil
@@ -13,7 +13,7 @@ def value(path):
     fp = open(path)
     val = fp.readline().rstrip()
     fp.close()
-    return val 
+    return val
 
 iValue = lambda path : int(value(path))
 fValue = lambda path : float(value(path))
@@ -29,7 +29,7 @@ def new_icon(colour, icon_name, percent, bar, full):
     if bar:
         return gdbar(newIcon, percent, colour, bar, full)
     else:
-        return newIcon 
+        return newIcon
 
 t_fmt = lambda sec : "%d:%.2d" % (sec/60,sec%60)
 
@@ -64,10 +64,10 @@ while True:
         output = "^fg(" + grey + ") -- ^fg()" + "^fg(" + red + ") Nothing Playing ^fg()" + "^fg(" + grey + ") -- ^fg()"
 
     output = output.rstrip(' -- ')
-    
+
     while len(output) < 150:
         output += ' '
-    
+
     if status['state'] != 'stop':
         time = [int(i) for i in status['time'].split(':')]
     else:
