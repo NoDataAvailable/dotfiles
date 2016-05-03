@@ -78,10 +78,12 @@ alias mkdir='mkdir -p -v'
 # Mount drives with user writability
 alias usermount='sudo mount -o gid=users,fmask=113,dmask=002'
 
+alias suspend=~/bin/sleep_suspend.sh
+
 # Use Powerline/Airline prompt
 #. /usr/share/zsh/site-contrib/powerline.zsh
 source ~/.shell_prompt.sh
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 4chdl() {
   4chdl_page() {

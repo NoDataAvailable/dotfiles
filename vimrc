@@ -1,4 +1,3 @@
-
 let $PYTHONPATH="/usr/lib/python3.3/site-packages"
 set shell=zsh
 
@@ -16,7 +15,7 @@ Bundle 'gmarik/vundle'
 
 " Passive
 Bundle 'ervandew/supertab'
-Bundle 'bling/vim-airline'
+Bundle 'vim-airline/vim-airline'
 Bundle 'scrooloose/syntastic'
 Bundle 'airblade/vim-gitgutter'
 Bundle 'kien/rainbow_parentheses.vim'
@@ -36,10 +35,11 @@ Bundle 'tomasr/molokai'
 Bundle 'junegunn/seoul256.vim'
 Bundle 'trapd00r/neverland-vim-theme'
 Bundle 'altercation/vim-colors-solarized'
+Bundle 'vim-airline/vim-airline-themes'
 
 " Language Support
 Bundle 'marijnh/tern_for_vim'
-Bundle 'Rip-Rip/clang_complete'
+" Bundle 'Rip-Rip/clang_complete'
 Bundle 'kchmck/vim-coffee-script'
 
 
@@ -74,6 +74,7 @@ set guioptions-=L           " remove left-hand scroll bar
 let javaScript_fold=1
 
 " Plugin configs
+" let g:clang_library_path = "/usr/lib/llvm-3.8/lib"
 " Colors for themes?
 let g:solarized_termcolors=256
 let g:rehash256 = 1
@@ -92,7 +93,6 @@ let g:tmuxline_preset = {
       \'b'    : '#W',
       \'win'  : ['#I', '#W'],
       \'cwin' : ['#I', '#W'],
-      \'x'    : [' ', '♫ #(mpc)'],
       \'y'    : ['%a', '%R'],
       \'z'    : '#H',
       \ 'options': {
