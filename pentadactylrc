@@ -47,4 +47,10 @@ highlight URL text-decoration: none; color: #AE81FF; background: inherit;
 highlight URLExtra color: #BCBCBC;
 highlight WarningMsg color: #F8F8F2 !important; background: #FD971F !important;
 
+style -name tabbrowser-height-fix chrome://* <<EOM
+[dactyl-australis=true] .tabbrowser-tabs {
+    max-height:       unset !important;
+}
+EOM
+
 " vim: set ft=pentadactyl:
