@@ -1,7 +1,7 @@
 #!/bin/bash
 
 OSDFONT="-*-roboto light-light-r-*-*-*-*-*-*-*-*-*-*"
-DZFONT="Roboto Light:size=24"
+DZFONT="Futura LT:style=Book:size=24"
 
 TOUCHPAD='Elan Touchpad'
 KEYBOARD='cros_ec'

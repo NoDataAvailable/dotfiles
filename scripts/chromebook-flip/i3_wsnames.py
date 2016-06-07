@@ -8,7 +8,9 @@ default_icon = '\uf013'
 icon_dict = {
         "Lxterminal" : '\uf120',
         "Firefox"    : '\uf269',
+        "chromium"   : '\uf268',
         "mpv"        : '\uf144',
+        "Google Play Music Desktop Player" : '\uf025',
         }
 
 def on_window_focus(i3, e):

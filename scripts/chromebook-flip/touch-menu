@@ -1,3 +1,0 @@
-echo Touch Menu |
-    dzen2 -w 384 -x 448 -y 240 -h 64 -ta c -sa c -l 4 \
-    -fn "Roboto Thin:size=24" -bg #222222 -p -m < menufile

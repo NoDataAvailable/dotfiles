@@ -1,4 +1,4 @@
-DZFONT="Roboto Light:size=24"
+DZFONT="Futura LT:style=Book:size=24"
 
 MENU_PID="/tmp/touch-menu.pid"
 
