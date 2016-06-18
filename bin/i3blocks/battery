@@ -1,0 +1,39 @@
+#!/bin/bash
+
+source ${0%/*}/fonts.sh
+
+ACPI_INFO=$(acpi -b)
+EXTRACTED=$(echo $ACPI_INFO | sed "s/.*: \([^%]*\).*/\1/g")
+
+STATE=$(echo $EXTRACTED | sed "s/\([^,]*\).*/\1/g")
+PCENT=$(echo $EXTRACTED | sed "s/.*, \(.*\)/\1/g")
+
+if [[ $PCENT -ge 90 ]]; then
+    BATT_ICON=$FA_BATT_FULL
+    BATT_COLR=$CO_GOOD
+elif [[ $PCENT -ge 80 ]]; then
+    BATT_ICON=$FA_BATT_3QRT
+    BATT_COLR=$CO_GOOD
+elif [[ $PCENT -ge 70 ]]; then
+    BATT_ICON=$FA_BATT_3QRT
+    BATT_COLR=$CO_CAUT
+elif [[ $PCENT -ge 45 ]]; then
+    BATT_ICON=$FA_BATT_1HLF
+    BATT_COLR=$CO_CAUT
+elif [[ $PCENT -ge 20 ]]; then
+    BATT_ICON=$FA_BATT_1QRT
+    BATT_COLR=$CO_WARN
+else
+    BATT_ICON=$FA_BATT_EMPT
+    BATT_COLR=$CO_DANG
+fi
+
+if [[ $STATE == "Charging" ]]; then
+    PLUG=$FA_PLUG
+else
+    PLUG=
+fi
+
+echo $PLUG $BATT_ICON $PCENT%
+echo $PLUG $BATT_ICON $PCENT%
+echo $BATT_COLR

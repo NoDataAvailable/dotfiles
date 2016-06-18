@@ -1,0 +1,26 @@
+#!/bin/bash
+
+source ${0%/*}/fonts.sh
+
+#PLAYING=$(cat ~/.gmusic_playback.json | jq .playing)
+#TITLE=$(cat ~/.gmusic_playback.json | jq .song.title | sed "s/\"//g")
+#ARTIST=$(cat ~/.gmusic_playback.json | jq .song.artist | sed "s/\"//g")
+
+mpd_info() {
+    mpc status -f "$1" | head -1
+}
+
+if [[ -n $(mpc playlist) ]]; then
+    if [[ -n $(mpc status | grep 'playing') ]]; then
+        ICON=$FA_PLAY
+    else
+        ICON=$FA_PAUSE
+    fi
+    echo $ICON `mpd_info "%title% -- %artist%"`
+    echo $ICON `mpd_info "%title%"`
+else
+    ICON=$FA_STOP
+    echo $ICON No Playlist
+    echo $ICON
+fi
+

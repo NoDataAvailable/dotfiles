@@ -1,0 +1,12 @@
+source ~/bin/i3blocks/fonts.sh
+
+if [[ -a /proc/sys/net/ipv4/conf/tun0/ ]]; then
+    echo $FA_LOCK
+    echo $FA_LOCK
+    echo $CO_GOOD
+else
+    echo $FA_UNLOCK
+    echo $FA_UNLOCK
+    echo $CO_WARN
+fi
+

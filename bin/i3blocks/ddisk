@@ -1,0 +1,10 @@
+#!/bin/bash
+
+DIR="${BLOCK_INSTANCE:-$HOME}"
+
+if [[ -n $(mount | grep $DIR) ]] ; then
+    ${0%/*}/disk
+else
+    echo "n/a"
+    echo "n/a"
+fi

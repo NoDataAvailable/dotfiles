@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+blurred=`mktemp --suffix .png`
+scrot -e "convert -blur 0x3 \$f $blurred && rm \$f"
+i3lock -i $blurred
+rm $blurred
