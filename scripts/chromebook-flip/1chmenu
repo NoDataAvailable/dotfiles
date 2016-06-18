@@ -1,5 +1,6 @@
-TM
-^ca(1,firefox)ffx^ca()
-^ca(1,~/bin/tablet-mode)tm^ca()
-^ca(1,spacefm)sfm^ca()
-^ca(1,onboard)kbd^ca()
+
+^ca(1,firefox)^ca()
+^ca(1,chromium)^ca()
+^ca(1,~/bin/tablet-mode)^ca()
+^ca(1,spacefm)^ca()
+^ca(1,onboard)^ca()

@@ -12,11 +12,13 @@ if [[ -a $TABLET_SWITCH ]] ; then
     TOGGLE=enable
     FGCLR="#AAFFAA"
     kill `pidof touchegg`
+    kill `pidof unclutter`
     rm $TABLET_SWITCH
 else
     TOGGLE=disable
     FGCLR="#FF9999"
     touchegg &
+    unclutter -root -idle 0.01 &
     touch $TABLET_SWITCH
 fi
 
