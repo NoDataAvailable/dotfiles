@@ -2,8 +2,18 @@ HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
 bindkey -v
-zstyle :compinstall filename '/home/robert/.zshrc'
+zstyle :compinstall filename '/home/rgb/.zshrc'
 
+# Antigen stuff
+source ~/.zsh/antigen/antigen.zsh
+
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle zsh-users/zsh-completions
+
+antigen apply
+
+# Get some key quirks ironed out
 typeset -A key
 
 key[Home]=${terminfo[khome]}
@@ -66,6 +76,7 @@ fi
 
 # Standard Aliases
 alias ls='ls -hF --color=auto'
+alias ll='ls -l'
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -I'
@@ -83,27 +94,26 @@ alias suspend=~/bin/sleep_suspend.sh
 # Use Powerline/Airline prompt
 #. /usr/share/zsh/site-contrib/powerline.zsh
 source ~/.shell_prompt.sh
-source ~/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 4chdl() {
-  4chdl_page() {
-    mkdir $1 && cd $1
-    wget -nv -O - $2 |
-    grep -Eo 'i.4cdn.org/[^"]+' |
-    uniq | xargs | read IMGS && [[ -n $IMGS ]] && echo $IMGS |
-    xargs wget -nc -nv
-    cd ..
-  }
+    4chdl_page() {
+        mkdir $1 && cd $1
+        wget -nv -O - $2 |
+        grep -Eo 'i.4cdn.org/[^"]+' |
+        uniq | xargs | read IMGS && [[ -n $IMGS ]] && echo $IMGS |
+        xargs wget -nc -nv
+        cd ..
+    }
 
-  if [ $# != "0" ]; then
-    for URL in $@; do
-      DIR=${${${URL#*.org/}%%/*}}${${URL##*/}%#*}
-	  4chdl_page $DIR $URL
-   done
-  else
-    for DIR in $( ls | grep '^[a-z][a-z]*[0-9]*[0-9]/$' ); do
-      URL="https://boards.4chan.org/${DIR%%[0-9]*[0-9]/}/thread/${${DIR##*[a-z]}%/}"
-	  4chdl_page $DIR $URL
-    done
-  fi
+    if [ $# != "0" ]; then
+        for URL in $@; do
+            DIR=${${${URL#*.org/}%%/*}}${${URL##*/}%#*}
+            4chdl_page $DIR $URL
+        done
+    else
+        for DIR in $( ls | grep '^[a-z][a-z]*[0-9]*[0-9]/$' ); do
+            URL="https://boards.4chan.org/${DIR%%[0-9]*[0-9]/}/thread/${${DIR##*[a-z]}%/}"
+            4chdl_page $DIR $URL
+        done
+    fi
 }
