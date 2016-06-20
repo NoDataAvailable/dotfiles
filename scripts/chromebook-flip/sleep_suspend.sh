@@ -1,8 +1,12 @@
-echo "Five seconds to shut the lid!" | osd_cat -d 4 -s 5 -p middle -A center
+#!/usr/bin/env bash
 
+DZFONT="Futura LT:style=Book:size=24"
+
+(echo "Shut the lid!" && sleep 3) |
+    dzen2 -w 300 -x 490 -y 320 -h 64 -ta c -fn "$DZFONT" -bg '#222222'
+
+~/bin/fancy_lock
 sleep 2
-source ~/bin/fancy_lock
-sleep 3
 
 xinput -disable 'Elan Touchscreen'
 systemctl suspend

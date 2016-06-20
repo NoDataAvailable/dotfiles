@@ -1,0 +1,3 @@
+[submodule "scripts/chromebook-flip/c100p-tweaks"]
+	path = scripts/chromebook-flip/c100p-tweaks
+	url = https://github.com/keenerd/c100p-tweaks
